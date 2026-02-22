@@ -1,20 +1,30 @@
 #!/usr/bin/env node
 /**
- * Wyze Vacuum Directional Controller
+ * Wyze Vacuum — Xbox Controller with Directional Driving
  *
- * Synthetic directional control using real-time position tracking + area clean.
+ * Drive your Wyze robot vacuum with an Xbox controller using synthetic
+ * directional control powered by real-time position tracking.
  *
  * How it works:
- *   1. Start the vacuum cleaning (full or room)
- *   2. Poll getCurrentPosition() every ~2s to get x,y coordinates
- *   3. Map joystick/keyboard input to a direction vector
- *   4. Compute target = current_position + direction_offset
- *   5. Send areaClean(target) to steer the vacuum toward the target
- *   6. Repeat — the vacuum continuously navigates toward the joystick direction
+ *   1. Start the vacuum cleaning (A button or room select)
+ *   2. Poll getCurrentPosition() every ~2s to get x,y in meters
+ *   3. Left stick → direction vector → target = position + offset
+ *   4. Send areaClean(target) to steer the vacuum
+ *   5. Repeat — vacuum continuously navigates toward the stick direction
  *
- * Position data format (from telemetry):
- *   [{x: 1.278, y: -2.065, task_id: ..., pose_id: ..., is_show: 0}]
- *   Coordinates are in METERS. Updates ~every 2 seconds during cleaning.
+ * Xbox Controller Layout:
+ *   Left Stick   — Directional driving (all 360°)
+ *   A            — Start cleaning
+ *   B            — Pause
+ *   X            — Stop driving
+ *   Y            — Return to dock
+ *   LB / RB      — Suction down / up
+ *   D-Pad Up/Dn  — Select room
+ *   D-Pad Right  — Clean selected room
+ *   Start        — Refresh status
+ *   Back         — Quick mapping
+ *
+ * Falls back to keyboard (WASD) if no controller connected.
  *
  * Usage:
  *   WYZE_KEY_ID=x WYZE_API_KEY=x node tools/directional-controller.js
@@ -26,16 +36,29 @@ const { VenusService, ControlType, ControlValue } = require('../venus')
 const readline = require('readline')
 
 // ── Config ──
-const POSITION_POLL_MS = 2000  // How often to poll position
-const STEP_DISTANCE = 0.5     // Meters to move per joystick command
-const MIN_MOVE_DIST = 0.15    // Ignore moves smaller than this
+const POSITION_POLL_MS = 2000
+const GAMEPAD_POLL_MS = 50    // 20Hz input polling
+const STEP_DISTANCE = 0.5    // Meters per directional command
+const DEAD_ZONE = 0.15
 const SUCTION_LABELS = ['', 'Quiet', 'Standard', 'Strong']
 const MODE_LABELS = {
   0: 'Idle', 1: 'Cleaning', 4: 'Paused', 5: 'Returning',
-  7: 'Sweeping', 10: 'Finished', 11: 'Docked', 14: 'Idle',
+  7: 'Sweeping', 9: 'Paused', 10: 'Finished', 11: 'Docked',
+  14: 'Idle', 25: 'Sweeping', 27: 'Paused', 29: 'Idle',
+  30: 'Cleaning', 31: 'Paused', 35: 'Idle', 36: 'Sweeping',
+  37: 'Paused', 39: 'Breakpoint', 40: 'Idle', 45: 'Mapping',
 }
 
-// ── Directional Controller ──
+// Standard Gamepad button indices (W3C mapping)
+const BTN = {
+  A: 0, B: 1, X: 2, Y: 3,
+  LB: 4, RB: 5, LT: 6, RT: 7,
+  BACK: 8, START: 9,
+  L3: 10, R3: 11,
+  DPAD_UP: 12, DPAD_DOWN: 13, DPAD_LEFT: 14, DPAD_RIGHT: 15,
+}
+
+// ── Controller ──
 
 class DirectionalController {
   constructor(venus, did, model, nickname) {
@@ -44,33 +67,31 @@ class DirectionalController {
     this.model = model
     this.nickname = nickname
 
-    // State
-    this.position = null      // {x, y, pose_id, task_id}
-    this.targetDir = null     // {dx, dy} normalized direction vector
+    this.position = null
+    this.direction = { dx: 0, dy: 0 }
     this.suctionLevel = 3
     this.mode = 0
     this.battery = 100
     this.rooms = []
     this.currentMapName = ''
+    this.selectedRoom = 0
     this.busy = false
-    this.driving = false      // Are we in directional driving mode?
-    this.positionHistory = [] // Track movement for display
+    this.driving = false
+    this._areaCleanFailed = false
+    this._lastBtnState = {}
   }
 
-  /** Initialize: load status, rooms, start position polling */
   async init() {
     const [statusRes, mapsRes] = await Promise.allSettled([
       this.venus.getStatus(this.did),
       this.venus.getMaps(this.did),
     ])
-
     if (statusRes.status === 'fulfilled') {
       const hb = statusRes.value.data?.heartBeat || {}
       this.mode = hb.mode || 0
       this.battery = hb.battery || 0
       this.suctionLevel = hb.clean_level || 3
     }
-
     if (mapsRes.status === 'fulfilled' && mapsRes.value.data) {
       const maps = Array.isArray(mapsRes.value.data) ? mapsRes.value.data : [mapsRes.value.data]
       const current = maps.find(m => m.current_map) || maps[0]
@@ -81,61 +102,38 @@ class DirectionalController {
     }
   }
 
-  /** Start position polling loop */
+  // ── Position Tracking ──
+
   startPositionPolling() {
-    this._pollInterval = setInterval(async () => {
+    this._posPoll = setInterval(async () => {
       try {
         const res = await this.venus.getCurrentPosition(this.did)
         if (res.data && Array.isArray(res.data) && res.data.length > 0) {
-          const pos = res.data[0]
-          const prevPos = this.position
-          this.position = { x: pos.x, y: pos.y, pose_id: pos.pose_id, task_id: pos.task_id }
-
-          // Track movement
-          if (prevPos) {
-            const dist = Math.sqrt((pos.x - prevPos.x) ** 2 + (pos.y - prevPos.y) ** 2)
-            if (dist > 0.01) {
-              this.positionHistory.push({ ...this.position, ts: Date.now() })
-              if (this.positionHistory.length > 50) this.positionHistory.shift()
-            }
-          } else {
-            this.positionHistory.push({ ...this.position, ts: Date.now() })
-          }
-
-          // Update status display
-          this._updateStatusLine()
-
-          // If we're driving and have a target direction, send the next move
-          if (this.driving && this.targetDir) {
+          this.position = { x: res.data[0].x, y: res.data[0].y, pose_id: res.data[0].pose_id }
+          if (this.driving && (this.direction.dx !== 0 || this.direction.dy !== 0)) {
             await this._executeMove()
           }
         }
-      } catch (e) {
-        // Silently retry — position may not be available when docked
-      }
+      } catch (e) { /* position not available when docked */ }
     }, POSITION_POLL_MS)
   }
 
-  /** Compute target from current position + direction and send area clean */
   async _executeMove() {
-    if (!this.position || !this.targetDir || this.busy) return
+    if (!this.position || this.busy || this._areaCleanFailed) return
+    if (this.direction.dx === 0 && this.direction.dy === 0) return
 
     const target = {
-      x: this.position.x + this.targetDir.dx * STEP_DISTANCE,
-      y: this.position.y + this.targetDir.dy * STEP_DISTANCE,
+      x: this.position.x + this.direction.dx * STEP_DISTANCE,
+      y: this.position.y + this.direction.dy * STEP_DISTANCE,
     }
 
     this.busy = true
     try {
-      // Try area clean with coordinates
       await this.venus.areaClean(this.did, [target])
-      process.stdout.write(` → (${target.x.toFixed(2)}, ${target.y.toFixed(2)})`)
     } catch (e) {
-      // Area clean may not work on this firmware — log once
       if (!this._areaCleanFailed) {
-        console.log(`\n⚠️  Area clean failed: ${e.response?.data?.message || e.message}`)
-        console.log('   Firmware may not support coordinate-based movement.')
-        console.log('   Falling back to room-level control only.')
+        console.log(`\n⚠️  Area clean not supported: ${e.response?.data?.message || e.message}`)
+        console.log('   Firmware may need update for coordinate-based steering.')
         this._areaCleanFailed = true
         this.driving = false
       }
@@ -144,49 +142,179 @@ class DirectionalController {
     }
   }
 
-  /** Set directional target from keyboard input */
-  setDirection(dx, dy) {
-    if (dx === 0 && dy === 0) {
-      this.targetDir = null
-      return
+  // ── Xbox Controller Input ──
+
+  processGamepadInput(gamepad) {
+    // Left stick → direction
+    let lx = gamepad.axes[0] || 0
+    let ly = gamepad.axes[1] || 0
+    lx = Math.abs(lx) < DEAD_ZONE ? 0 : lx
+    ly = Math.abs(ly) < DEAD_ZONE ? 0 : -ly  // invert Y: stick up = forward
+
+    const mag = Math.min(1, Math.sqrt(lx * lx + ly * ly))
+    if (mag > DEAD_ZONE) {
+      this.driving = true
+      this.direction = { dx: lx / mag, dy: ly / mag }
+    } else {
+      this.direction = { dx: 0, dy: 0 }
     }
-    // Normalize
-    const mag = Math.sqrt(dx * dx + dy * dy)
-    this.targetDir = { dx: dx / mag, dy: dy / mag }
+
+    // Button presses (edge-triggered: fire only on press, not hold)
+    const pressed = (idx) => {
+      const now = gamepad.buttons[idx] ? gamepad.buttons[idx].pressed : false
+      const was = this._lastBtnState[idx] || false
+      this._lastBtnState[idx] = now
+      return now && !was
+    }
+
+    if (pressed(BTN.A)) this.exec('🧹 Clean...', () => this.venus.clean(this.did))
+    if (pressed(BTN.B)) {
+      this.driving = false
+      this.direction = { dx: 0, dy: 0 }
+      this.exec('⏸️  Pause...', () => this.venus.pause(this.did))
+    }
+    if (pressed(BTN.X)) {
+      this.driving = false
+      this.direction = { dx: 0, dy: 0 }
+      console.log('\n⏹️  Driving stopped')
+    }
+    if (pressed(BTN.Y)) {
+      this.driving = false
+      this.direction = { dx: 0, dy: 0 }
+      this.exec('🏠 Dock...', () => this.venus.dock(this.did))
+    }
+    if (pressed(BTN.LB)) {
+      this.suctionLevel = Math.max(1, this.suctionLevel - 1)
+      this.exec(`🔈 Suction → ${SUCTION_LABELS[this.suctionLevel]}...`, () =>
+        this.venus.setSuctionLevel(this.did, this.model, this.suctionLevel))
+    }
+    if (pressed(BTN.RB)) {
+      this.suctionLevel = Math.min(3, this.suctionLevel + 1)
+      this.exec(`🔊 Suction → ${SUCTION_LABELS[this.suctionLevel]}...`, () =>
+        this.venus.setSuctionLevel(this.did, this.model, this.suctionLevel))
+    }
+    if (pressed(BTN.DPAD_UP) && this.rooms.length) {
+      this.selectedRoom = (this.selectedRoom - 1 + this.rooms.length) % this.rooms.length
+      console.log(`\n📌 Room: ${this.rooms[this.selectedRoom].room_name} [D-Pad → to clean]`)
+    }
+    if (pressed(BTN.DPAD_DOWN) && this.rooms.length) {
+      this.selectedRoom = (this.selectedRoom + 1) % this.rooms.length
+      console.log(`\n📌 Room: ${this.rooms[this.selectedRoom].room_name} [D-Pad → to clean]`)
+    }
+    if (pressed(BTN.DPAD_RIGHT)) {
+      const room = this.rooms[this.selectedRoom]
+      if (room) {
+        this.exec(`🚪 "${room.room_name}"...`, () =>
+          this.venus.sweepRooms(this.did, [room.room_id]))
+      }
+    }
+    if (pressed(BTN.START)) {
+      this.refreshStatus().then(() => this.printStatus())
+    }
+    if (pressed(BTN.BACK)) {
+      this.exec('🗺️  Mapping...', () =>
+        this.venus.control(this.did, ControlType.QUICK_MAPPING, ControlValue.START))
+    }
+
+    this._updateHUD(mag)
   }
 
-  _updateStatusLine() {
-    if (!this.position) return
-    const pos = `(${this.position.x.toFixed(2)}, ${this.position.y.toFixed(2)})`
-    const dir = this.targetDir
-      ? `→ (${(this.position.x + this.targetDir.dx * STEP_DISTANCE).toFixed(2)}, ${(this.position.y + this.targetDir.dy * STEP_DISTANCE).toFixed(2)})`
+  _updateHUD(stickMag) {
+    const pos = this.position
+      ? `(${this.position.x.toFixed(2)},${this.position.y.toFixed(2)})`
+      : '(?,?)'
+    const modeStr = this.driving ? '🚗 DRIVING' : (MODE_LABELS[this.mode] || `mode:${this.mode}`)
+    const stickDir = stickMag > DEAD_ZONE
+      ? ` stick:${(Math.atan2(this.direction.dx, this.direction.dy) * 180 / Math.PI).toFixed(0)}°`
       : ''
-    const mode = this.driving ? '🚗 DRIVING' : MODE_LABELS[this.mode] || `mode:${this.mode}`
-    process.stdout.write(`\r📍 ${pos} ${dir} | ${mode} | 🔋${this.battery}%    `)
+    process.stdout.write(`\r📍${pos} ${modeStr} 🔋${this.battery}%${stickDir}         `)
   }
 
-  /** Safely execute a Venus API command */
+  // ── Keyboard Fallback ──
+
+  startKeyboard() {
+    readline.emitKeypressEvents(process.stdin)
+    if (process.stdin.isTTY) process.stdin.setRawMode(true)
+
+    process.stdin.on('keypress', async (str, key) => {
+      if (!key) return
+      if (key.ctrl && key.name === 'c') { this.shutdown(); process.exit() }
+
+      const dirs = {
+        w: { dx: 0, dy: 1 }, s: { dx: 0, dy: -1 },
+        a: { dx: -1, dy: 0 }, d: { dx: 1, dy: 0 },
+        q: { dx: -0.707, dy: 0.707 }, e: { dx: 0.707, dy: 0.707 },
+      }
+
+      if (dirs[key.name]) {
+        this.driving = true
+        this.direction = dirs[key.name]
+        const labels = { w: '⬆️ FWD', s: '⬇️ BACK', a: '⬅️ LEFT', d: '➡️ RIGHT', q: '↖️ FWD-L', e: '↗️ FWD-R' }
+        console.log(`\n${labels[key.name]}`)
+      }
+
+      switch (key.name) {
+        case 'x':
+          this.driving = false
+          this.direction = { dx: 0, dy: 0 }
+          console.log('\n⏹️  Driving stopped')
+          break
+        case 'space':
+          this.driving = false
+          this.direction = { dx: 0, dy: 0 }
+          await this.exec('⏹️  Stop...', () =>
+            this.venus.control(this.did, ControlType.GLOBAL_SWEEPING, ControlValue.STOP))
+          break
+        case '1': await this.exec('🧹 Clean...', () => this.venus.clean(this.did)); break
+        case '2':
+          this.driving = false
+          await this.exec('⏸️  Pause...', () => this.venus.pause(this.did))
+          break
+        case '3':
+          this.driving = false
+          await this.exec('🏠 Dock...', () => this.venus.dock(this.did))
+          break
+        case '4':
+          this.suctionLevel = Math.max(1, this.suctionLevel - 1)
+          await this.exec(`🔈 Suction → ${SUCTION_LABELS[this.suctionLevel]}`, () =>
+            this.venus.setSuctionLevel(this.did, this.model, this.suctionLevel))
+          break
+        case '5':
+          this.suctionLevel = Math.min(3, this.suctionLevel + 1)
+          await this.exec(`🔊 Suction → ${SUCTION_LABELS[this.suctionLevel]}`, () =>
+            this.venus.setSuctionLevel(this.did, this.model, this.suctionLevel))
+          break
+        case '6': await this.refreshStatus(); this.printStatus(); break
+        case 'h': this.printControls(); break
+        case '7': case '8': case '9': case '0': {
+          const idx = key.name === '0' ? 3 : parseInt(key.name) - 7
+          const room = this.rooms[idx]
+          if (room) await this.exec(`🚪 "${room.room_name}"...`, () =>
+            this.venus.sweepRooms(this.did, [room.room_id]))
+          break
+        }
+      }
+    })
+  }
+
+  // ── Helpers ──
+
   async exec(label, fn) {
     if (this.busy) return
     this.busy = true
     process.stdout.write(`\n${label}`)
-    try {
-      await fn()
-      console.log(' ✅')
-    } catch (e) {
-      console.log(` ❌ ${e.response?.data?.message || e.message}`)
-    } finally {
-      this.busy = false
-    }
+    try { await fn(); console.log(' ✅') }
+    catch (e) { console.log(` ❌ ${e.response?.data?.message || e.message}`) }
+    finally { this.busy = false }
   }
 
   async refreshStatus() {
     try {
       const res = await this.venus.getStatus(this.did)
       const hb = res.data?.heartBeat || {}
-      this.mode = hb.mode || this.mode
-      this.battery = hb.battery || this.battery
-      this.suctionLevel = hb.clean_level || this.suctionLevel
+      this.mode = hb.mode ?? this.mode
+      this.battery = hb.battery ?? this.battery
+      this.suctionLevel = hb.clean_level ?? this.suctionLevel
     } catch (e) { /* ignore */ }
   }
 
@@ -195,227 +323,99 @@ class DirectionalController {
     console.log(`\n📊 ${this.nickname}`)
     console.log(`   Mode: ${mode} | Battery: ${this.battery}% | Suction: ${SUCTION_LABELS[this.suctionLevel]}`)
     if (this.currentMapName) console.log(`   Map: ${this.currentMapName}`)
-    if (this.rooms.length) console.log(`   Rooms: ${this.rooms.map(r => r.room_name).join(', ')}`)
-    if (this.position) console.log(`   Position: (${this.position.x.toFixed(4)}, ${this.position.y.toFixed(4)}) pose:${this.position.pose_id}`)
+    if (this.rooms.length) {
+      this.rooms.forEach((r, i) => {
+        const sel = i === this.selectedRoom ? ' ◀' : ''
+        console.log(`   ${i === this.selectedRoom ? '→' : ' '} ${r.room_name}${sel}`)
+      })
+    }
+    if (this.position) console.log(`   Position: (${this.position.x.toFixed(4)}, ${this.position.y.toFixed(4)})`)
     else console.log('   Position: not available (start cleaning to enable tracking)')
   }
 
   printControls() {
     console.log('')
-    console.log('╔══════════════════════════════════════════════════════╗')
-    console.log('║  🎮 DIRECTIONAL VACUUM CONTROLLER                   ║')
-    console.log('╠══════════════════════════════════════════════════════╣')
-    console.log('║                                                      ║')
-    console.log('║  Cleaning:                                           ║')
-    console.log('║    1 = Start Clean    2 = Pause    3 = Dock          ║')
-    console.log('║    4 = Suction ↓      5 = Suction ↑                  ║')
-    console.log('║    6 = Status         Space = Stop                   ║')
-    console.log('║                                                      ║')
-    console.log('║  Directional Driving (while cleaning):               ║')
-    console.log('║    W = Forward    S = Backward                       ║')
-    console.log('║    A = Left      D = Right                           ║')
-    console.log('║    Q = Fwd-Left  E = Fwd-Right                       ║')
-    console.log('║    X = Stop driving                                  ║')
-    console.log('║                                                      ║')
-    if (this.rooms.length) {
-      console.log('║  Room Cleaning:                                      ║')
-      this.rooms.forEach((r, i) => {
-        const key = i <= 2 ? String(i + 7) : '0'
-        const line = `║    ${key} = "${r.room_name}"`
-        console.log(line.padEnd(55) + ' ║')
-      })
-      console.log('║                                                      ║')
-    }
-    console.log('║  m = Quick Map    h = Help    Ctrl+C = Quit          ║')
-    console.log('╚══════════════════════════════════════════════════════╝')
+    console.log('╔══════════════════════════════════════════════════════════╗')
+    console.log('║  🎮 XBOX CONTROLLER                                     ║')
+    console.log('║  Left Stick  = Drive (360°)                             ║')
+    console.log('║  A = Clean    B = Pause    X = Stop drive    Y = Dock   ║')
+    console.log('║  LB = Suction ↓    RB = Suction ↑                       ║')
+    console.log('║  D-Pad ↑↓ = Select room    D-Pad → = Clean room        ║')
+    console.log('║  Start = Status    Back = Quick Map                     ║')
+    console.log('╠══════════════════════════════════════════════════════════╣')
+    console.log('║  ⌨️  KEYBOARD (fallback)                                 ║')
+    console.log('║  WASD/QE = Drive    X = Stop drive    Space = Stop all  ║')
+    console.log('║  1=Clean  2=Pause  3=Dock  4/5=Suction  6=Status       ║')
+    console.log('║  7-0 = Clean rooms    h = Help    Ctrl+C = Quit        ║')
+    console.log('╚══════════════════════════════════════════════════════════╝')
     console.log('')
   }
 
-  /** Start interactive keyboard control */
-  start() {
+  shutdown() {
+    if (this._posPoll) clearInterval(this._posPoll)
+    if (this._gpPoll) clearInterval(this._gpPoll)
+    if (this._statusPoll) clearInterval(this._statusPoll)
+    if (process.stdin.isTTY) process.stdin.setRawMode(false)
+    console.log('\n👋 Goodbye!')
+  }
+
+  start(gamepadAvailable) {
     this.printStatus()
     this.printControls()
     this.startPositionPolling()
+    this.startKeyboard()
 
-    readline.emitKeypressEvents(process.stdin)
-    if (process.stdin.isTTY) process.stdin.setRawMode(true)
-
-    process.stdin.on('keypress', async (str, key) => {
-      if (!key) return
-      if (key.ctrl && key.name === 'c') {
-        console.log('\n\n👋 Stopping...')
-        if (this._pollInterval) clearInterval(this._pollInterval)
-        if (process.stdin.isTTY) process.stdin.setRawMode(false)
-        process.exit()
-      }
-
-      switch (key.name) {
-        // ── Directional driving ──
-        case 'w':
-          this.driving = true
-          this.setDirection(0, 1)   // Forward (+Y)
-          console.log('\n⬆️  Driving FORWARD')
-          break
-        case 's':
-          this.driving = true
-          this.setDirection(0, -1)  // Backward (-Y)
-          console.log('\n⬇️  Driving BACKWARD')
-          break
-        case 'a':
-          this.driving = true
-          this.setDirection(-1, 0)  // Left (-X)
-          console.log('\n⬅️  Driving LEFT')
-          break
-        case 'd':
-          this.driving = true
-          this.setDirection(1, 0)   // Right (+X)
-          console.log('\n➡️  Driving RIGHT')
-          break
-        case 'q':
-          this.driving = true
-          this.setDirection(-0.707, 0.707)  // Forward-left
-          console.log('\n↖️  Driving FORWARD-LEFT')
-          break
-        case 'e':
-          this.driving = true
-          this.setDirection(0.707, 0.707)   // Forward-right
-          console.log('\n↗️  Driving FORWARD-RIGHT')
-          break
-        case 'x':
-          this.driving = false
-          this.targetDir = null
-          console.log('\n⏹️  Driving stopped')
-          break
-
-        // ── Standard controls ──
-        case '1':
-          await this.exec('🧹 Starting clean...', () => this.venus.clean(this.did))
-          this.mode = 1
-          break
-        case '2':
-          await this.exec('⏸️  Pausing...', () => this.venus.pause(this.did))
-          this.driving = false
-          this.targetDir = null
-          break
-        case '3':
-          await this.exec('🏠 Returning to dock...', () => this.venus.dock(this.did))
-          this.driving = false
-          this.targetDir = null
-          break
-        case '4':
-          this.suctionLevel = Math.max(1, this.suctionLevel - 1)
-          await this.exec(`🔈 Suction → ${SUCTION_LABELS[this.suctionLevel]}...`, () =>
-            this.venus.setSuctionLevel(this.did, this.model, this.suctionLevel))
-          break
-        case '5':
-          this.suctionLevel = Math.min(3, this.suctionLevel + 1)
-          await this.exec(`🔊 Suction → ${SUCTION_LABELS[this.suctionLevel]}...`, () =>
-            this.venus.setSuctionLevel(this.did, this.model, this.suctionLevel))
-          break
-        case '6':
-          await this.refreshStatus()
-          this.printStatus()
-          break
-        case 'space':
-          this.driving = false
-          this.targetDir = null
-          await this.exec('⏹️  Stopping...', () =>
-            this.venus.control(this.did, ControlType.GLOBAL_SWEEPING, ControlValue.STOP))
-          break
-        case 'h':
-          this.printControls()
-          break
-        case 'm':
-          await this.exec('🗺️  Quick mapping...', () =>
-            this.venus.control(this.did, ControlType.QUICK_MAPPING, ControlValue.START))
-          break
-
-        // ── Room cleaning ──
-        case '7': case '8': case '9': case '0': {
-          const idx = key.name === '0' ? 3 : parseInt(key.name) - 7
-          const room = this.rooms[idx]
-          if (room) {
-            await this.exec(`🚪 Cleaning "${room.room_name}"...`, () =>
-              this.venus.sweepRooms(this.did, [room.room_id]))
-          }
-          break
-        }
-      }
-    })
-
-    // Refresh status every 30s
-    setInterval(async () => {
+    this._statusPoll = setInterval(async () => {
       if (!this.busy) await this.refreshStatus()
     }, 30000)
+
+    if (gamepadAvailable) {
+      console.log('🎮 Xbox controller connected! Use left stick to drive.\n')
+    } else {
+      console.log('⌨️  No controller detected — using keyboard (WASD).')
+      console.log('   Connect Xbox controller via Bluetooth/USB and restart.\n')
+    }
   }
 }
 
-// ── Xbox Controller Support ──
-
-let HID
-try { HID = require('node-hid') } catch (e) { /* optional */ }
+// ── Gamepad Setup (uses gamepad-node / W3C Gamepad API) ──
 
 function setupGamepad(ctrl) {
-  if (!HID) return false
-  const devices = HID.devices()
-  const gp = devices.find(d => {
-    const name = ((d.product || '') + (d.manufacturer || '')).toLowerCase()
-    return name.includes('xbox') || name.includes('gamepad') ||
-           name.includes('controller') || d.vendorId === 0x045e
-  })
-  if (!gp) return false
-
-  console.log(`🎮 Controller: ${gp.product || gp.manufacturer || 'Xbox Controller'}`)
+  let gp
   try {
-    const device = new HID.HID(gp.path)
-    const DEAD_ZONE = 0.15
-
-    device.on('data', (buf) => {
-      // Parse left stick (common Xbox HID format)
-      const rawX = (buf[1] | (buf[2] << 8)) / 32767 - 1
-      const rawY = (buf[3] | (buf[4] << 8)) / 32767 - 1
-
-      const x = Math.abs(rawX) < DEAD_ZONE ? 0 : rawX
-      const y = Math.abs(rawY) < DEAD_ZONE ? 0 : -rawY // invert Y
-
-      if (x !== 0 || y !== 0) {
-        ctrl.driving = true
-        ctrl.setDirection(x, y)
-      } else if (ctrl.driving) {
-        // Stick returned to center — keep current direction
-        // (user releases stick = vacuum keeps going in that direction until X pressed)
-      }
-
-      // Parse buttons
-      const buttons = buf[3] || 0
-      if (buttons & 0x01) ctrl.exec('🧹 Clean...', () => ctrl.venus.clean(ctrl.did))
-      if (buttons & 0x02) {
-        ctrl.exec('⏸️  Pause...', () => ctrl.venus.pause(ctrl.did))
-        ctrl.driving = false
-        ctrl.targetDir = null
-      }
-      if (buttons & 0x08) {
-        ctrl.exec('🏠 Dock...', () => ctrl.venus.dock(ctrl.did))
-        ctrl.driving = false
-        ctrl.targetDir = null
-      }
-    })
-
-    device.on('error', () => console.log('\n🎮 Controller disconnected'))
-    return true
+    gp = require('gamepad-node')
+    gp.installNavigatorShim()
   } catch (e) {
-    console.log(`⚠️  Controller error: ${e.message}`)
+    console.log('⚠️  gamepad-node not available. Install: npm install gamepad-node')
     return false
   }
+
+  // Check for initial connection
+  const pads = navigator.getGamepads()
+  const initial = pads.find(p => p)
+  if (initial) {
+    console.log(`🎮 ${initial.id} (${initial.buttons.length} buttons, ${initial.axes.length} axes)`)
+  }
+
+  // Poll gamepad at 20Hz
+  ctrl._gpPoll = setInterval(() => {
+    const pads = navigator.getGamepads()
+    const pad = pads.find(p => p)
+    if (pad) {
+      ctrl.processGamepadInput(pad)
+    }
+  }, GAMEPAD_POLL_MS)
+
+  return !!initial
 }
 
 // ── Main ──
 
 async function main() {
-  console.log('╔══════════════════════════════════════════════════════╗')
-  console.log('║  🤖 WYZE VACUUM DIRECTIONAL CONTROLLER              ║')
-  console.log('║  Real-time position tracking + synthetic steering    ║')
-  console.log('╚══════════════════════════════════════════════════════╝')
+  console.log('╔══════════════════════════════════════════════════════════╗')
+  console.log('║  🤖 WYZE VACUUM — XBOX CONTROLLER                      ║')
+  console.log('║  Directional driving with real-time position tracking   ║')
+  console.log('╚══════════════════════════════════════════════════════════╝')
   console.log('')
 
   const keyId = process.env.WYZE_KEY_ID
@@ -436,7 +436,6 @@ async function main() {
     return ['vacuum', 'robot', 'ja_ro'].some(k => s.includes(k))
   })
   if (!vacuum) { console.error('❌ No vacuum found.'); process.exit(1) }
-
   console.log(`🤖 ${vacuum.nickname} (${vacuum.mac})`)
 
   const venus = new VenusService(wyze.accessToken)
@@ -445,15 +444,14 @@ async function main() {
   console.log('📡 Loading status & maps...')
   await ctrl.init()
 
-  setupGamepad(ctrl)
-  ctrl.start()
+  const hasGamepad = setupGamepad(ctrl)
+  ctrl.start(hasGamepad)
+
+  process.on('SIGINT', () => { ctrl.shutdown(); process.exit() })
 }
 
 module.exports = { DirectionalController }
 
 if (require.main === module) {
-  main().catch(e => {
-    console.error(`\n💥 Fatal: ${e.message}`)
-    process.exit(1)
-  })
+  main().catch(e => { console.error(`\n💥 ${e.message}`); process.exit(1) })
 }
