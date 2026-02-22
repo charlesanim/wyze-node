@@ -36,11 +36,14 @@ const { VenusService, ControlType, ControlValue } = require('../venus')
 const readline = require('readline')
 
 // ── Config ──
-const POSITION_POLL_MS = 2000
-const GAMEPAD_POLL_MS = 50    // 20Hz input polling
-const STEP_DISTANCE = 0.5    // Meters per directional command
-const DEAD_ZONE = 0.25       // High dead zone — Xbox Series X sticks drift
-const DRIVE_THRESHOLD = 0.4  // Stick must be pushed past this to engage driving
+const POSITION_POLL_MS = 1500   // Position poll — fast enough for tracking
+const GAMEPAD_POLL_MS = 50      // 20Hz input polling
+const STEP_DISTANCE = 1.0       // Meters per directional command (larger = more responsive)
+const DEAD_ZONE = 0.25          // Xbox Series X stick drift threshold
+const DRIVE_THRESHOLD = 0.4     // Stick engagement threshold
+const ARRIVAL_RADIUS = 0.3      // Meters — "close enough" to target
+const MIN_CMD_INTERVAL = 2500   // Minimum ms between areaClean commands
+const DIR_CHANGE_THRESHOLD = 30 // Degrees — stick must change this much to re-send
 const SUCTION_LABELS = ['', 'Quiet', 'Standard', 'Strong']
 const MODE_LABELS = {
   0: 'Idle', 1: 'Cleaning', 4: 'Paused', 5: 'Returning',
@@ -81,6 +84,12 @@ class DirectionalController {
     this.driving = false
     this._areaCleanFailed = false
     this._lastBtnState = {}
+
+    // Steering state
+    this._activeTarget = null     // {x, y} — target we sent to vacuum
+    this._lastCmdTime = 0         // Timestamp of last areaClean
+    this._lastAngle = null        // Last commanded angle (degrees)
+    this._cmdCount = 0            // Commands sent this session
   }
 
   async init() {
@@ -109,15 +118,65 @@ class DirectionalController {
   startPositionPolling() {
     this._posPoll = setInterval(async () => {
       try {
-        const res = await this.venus.getCurrentPosition(this.did)
-        if (res.data && Array.isArray(res.data) && res.data.length > 0) {
-          this.position = { x: res.data[0].x, y: res.data[0].y, pose_id: res.data[0].pose_id }
-          if (this.driving && (this.direction.dx !== 0 || this.direction.dy !== 0)) {
-            await this._executeMove()
-          }
+        const [posRes, statusRes] = await Promise.allSettled([
+          this.venus.getCurrentPosition(this.did),
+          this.venus.getStatus(this.did),
+        ])
+
+        // Update position
+        if (posRes.status === 'fulfilled' && posRes.value.data && Array.isArray(posRes.value.data) && posRes.value.data.length > 0) {
+          this.position = { x: posRes.value.data[0].x, y: posRes.value.data[0].y, pose_id: posRes.value.data[0].pose_id }
+        }
+
+        // Update mode/battery from heartbeat
+        if (statusRes.status === 'fulfilled') {
+          const hb = statusRes.value.data?.heartBeat || {}
+          if (hb.mode !== undefined) this.mode = hb.mode
+          if (hb.battery !== undefined) this.battery = hb.battery
+        }
+
+        // If driving and we have position, check if we should send next command
+        if (this.driving && this.position && (this.direction.dx !== 0 || this.direction.dy !== 0)) {
+          this._checkAndSendMove()
         }
       } catch (e) { /* position not available when docked */ }
     }, POSITION_POLL_MS)
+  }
+
+  _shouldSendNewCommand() {
+    const now = Date.now()
+
+    // Respect minimum interval between commands
+    if (now - this._lastCmdTime < MIN_CMD_INTERVAL) return false
+
+    // If no active target, always send
+    if (!this._activeTarget) return true
+
+    // If vacuum arrived at target (or close enough), send next
+    if (this.position) {
+      const dx = this.position.x - this._activeTarget.x
+      const dy = this.position.y - this._activeTarget.y
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      if (dist < ARRIVAL_RADIUS) return true
+    }
+
+    // If stick direction changed significantly, re-send
+    const currentAngle = Math.atan2(this.direction.dx, this.direction.dy) * 180 / Math.PI
+    if (this._lastAngle !== null) {
+      let diff = Math.abs(currentAngle - this._lastAngle)
+      if (diff > 180) diff = 360 - diff
+      if (diff > DIR_CHANGE_THRESHOLD) return true
+    }
+
+    // Timeout: if vacuum hasn't moved for a while, try again
+    if (now - this._lastCmdTime > 5000) return true
+
+    return false
+  }
+
+  async _checkAndSendMove() {
+    if (!this._shouldSendNewCommand()) return
+    await this._executeMove()
   }
 
   async _executeMove() {
@@ -125,22 +184,26 @@ class DirectionalController {
     if (this.direction.dx === 0 && this.direction.dy === 0) return
 
     const target = {
-      x: this.position.x + this.direction.dx * STEP_DISTANCE,
-      y: this.position.y + this.direction.dy * STEP_DISTANCE,
+      x: parseFloat((this.position.x + this.direction.dx * STEP_DISTANCE).toFixed(4)),
+      y: parseFloat((this.position.y + this.direction.dy * STEP_DISTANCE).toFixed(4)),
     }
 
     this.busy = true
     try {
       const result = await this.venus.areaClean(this.did, [target])
-      // Check if the API actually acted on it (code 1 = success, but vacuum may ignore coords)
-      if (result.code !== 1) {
-        console.log(`\n⚠️  Area clean response code: ${result.code} — ${result.message}`)
+      if (result.code === 1) {
+        this._activeTarget = target
+        this._lastCmdTime = Date.now()
+        this._lastAngle = Math.atan2(this.direction.dx, this.direction.dy) * 180 / Math.PI
+        this._cmdCount++
+        const angle = this._lastAngle.toFixed(0)
+        process.stdout.write(`\n  → target (${target.x.toFixed(2)},${target.y.toFixed(2)}) ${angle}° #${this._cmdCount}`)
+      } else {
+        console.log(`\n⚠️  areaClean code: ${result.code} — ${result.message}`)
       }
     } catch (e) {
       if (!this._areaCleanFailed) {
-        console.log(`\n⚠️  Area clean not supported: ${e.response?.data?.message || e.message}`)
-        console.log('   Your firmware (1.6.55) may not support coordinate-based steering.')
-        console.log('   Firmware 1.6.173+ required. Use room-level control instead.')
+        console.log(`\n⚠️  Area clean error: ${e.response?.data?.message || e.message}`)
         this._areaCleanFailed = true
         this.driving = false
       }
@@ -162,12 +225,19 @@ class DirectionalController {
 
     if (mag > DRIVE_THRESHOLD) {
       // Stick pushed hard enough — engage/update driving
+      const newAngle = (Math.atan2(lx, ly) * 180 / Math.PI).toFixed(0)
       if (!this.driving) {
         this.driving = true
-        const angle = (Math.atan2(lx, ly) * 180 / Math.PI).toFixed(0)
-        console.log(`\n🚗 Driving engaged (${angle}°)`)
+        this._activeTarget = null  // Reset target tracking
+        this._lastCmdTime = 0     // Allow immediate command
+        this._lastAngle = null
+        console.log(`\n🚗 Driving engaged (${newAngle}°)`)
+        // Trigger immediate move on engage
+        this.direction = { dx: lx / mag, dy: ly / mag }
+        this._executeMove()
+      } else {
+        this.direction = { dx: lx / mag, dy: ly / mag }
       }
-      this.direction = { dx: lx / mag, dy: ly / mag }
       this._stickReleaseTime = null
     } else if (this.driving) {
       // Stick returned to center — auto-disengage after 500ms
@@ -176,8 +246,9 @@ class DirectionalController {
       } else if (Date.now() - this._stickReleaseTime > 500) {
         this.driving = false
         this.direction = { dx: 0, dy: 0 }
+        this._activeTarget = null
+        this._lastAngle = null
         this._stickReleaseTime = null
-        // Don't spam "stopped" messages
         if (!this._lastStopMsg || Date.now() - this._lastStopMsg > 2000) {
           console.log('\n⏹️  Stick released — driving stopped')
           this._lastStopMsg = Date.now()
@@ -197,16 +268,19 @@ class DirectionalController {
     if (pressed(BTN.B)) {
       this.driving = false
       this.direction = { dx: 0, dy: 0 }
+      this._activeTarget = null
       this.exec('⏸️  Pause...', () => this.venus.pause(this.did))
     }
     if (pressed(BTN.X)) {
       this.driving = false
       this.direction = { dx: 0, dy: 0 }
+      this._activeTarget = null
       console.log('\n⏹️  Driving stopped')
     }
     if (pressed(BTN.Y)) {
       this.driving = false
       this.direction = { dx: 0, dy: 0 }
+      this._activeTarget = null
       this.exec('🏠 Dock...', () => this.venus.dock(this.did))
     }
     if (pressed(BTN.LB)) {
@@ -249,16 +323,21 @@ class DirectionalController {
     const pos = this.position
       ? `(${this.position.x.toFixed(2)},${this.position.y.toFixed(2)})`
       : '(—,—)'
-    const modeStr = this.driving
-      ? '🚗 DRIVE'
-      : (MODE_LABELS[this.mode] || `mode:${this.mode}`)
+    let modeStr
+    if (this.driving) {
+      modeStr = '🚗 DRIVE'
+    } else if (this.mode === 30) {
+      modeStr = '🎯 NAV'
+    } else {
+      modeStr = MODE_LABELS[this.mode] || `mode:${this.mode}`
+    }
     const stick = stickMag > DEAD_ZONE
-      ? ` 🕹️${(Math.atan2(this.direction.dx, this.direction.dy) * 180 / Math.PI).toFixed(0)}° ${(stickMag * 100).toFixed(0)}%`
+      ? ` 🕹️${(Math.atan2(this.direction.dx, this.direction.dy) * 180 / Math.PI).toFixed(0)}°`
       : ''
-    const room = this.rooms[this.selectedRoom]
-      ? ` [${this.rooms[this.selectedRoom].room_name}]`
+    const tgt = this._activeTarget
+      ? ` →(${this._activeTarget.x.toFixed(1)},${this._activeTarget.y.toFixed(1)})`
       : ''
-    process.stdout.write(`\r📍${pos} ${modeStr} 🔋${this.battery}%${stick}${room}          `)
+    process.stdout.write(`\r📍${pos} ${modeStr} 🔋${this.battery}%${stick}${tgt}          `)
   }
 
   // ── Keyboard Fallback ──
@@ -368,19 +447,16 @@ class DirectionalController {
     console.log('')
     console.log('╔══════════════════════════════════════════════════════════╗')
     console.log('║  🎮 XBOX CONTROLLER                                     ║')
-    console.log('║                                                          ║')
-    console.log('║  A = Start Clean       B = Pause                        ║')
-    console.log('║  Y = Return to Dock    X = Stop driving                 ║')
-    console.log('║  LB = Suction ↓        RB = Suction ↑                    ║')
-    console.log('║  D-Pad ↑↓ = Select room                                 ║')
-    console.log('║  D-Pad →  = Clean selected room                         ║')
-    console.log('║  Start = Status        Back = Quick Map                 ║')
-    console.log('║                                                          ║')
-    console.log('║  Left Stick = Directional steering *                    ║')
-    console.log('║  * Requires firmware ≥ 1.6.173 for coordinate steering  ║')
+    console.log('║  Left Stick  = Drive (360° — hold to steer)             ║')
+    console.log('║  A = Clean    B = Pause    X = Stop drive    Y = Dock   ║')
+    console.log('║  LB = Suction ↓    RB = Suction ↑                       ║')
+    console.log('║  D-Pad ↑↓ = Select room    D-Pad → = Clean room        ║')
+    console.log('║  Start = Status    Back = Quick Map                     ║')
     console.log('╠══════════════════════════════════════════════════════════╣')
-    console.log('║  ⌨️  KEYBOARD: WASD=Drive  1=Clean 2=Pause 3=Dock       ║')
-    console.log('║  4/5=Suction  6=Status  7-0=Rooms  h=Help  Ctrl+C=Quit ║')
+    console.log('║  ⌨️  KEYBOARD (fallback)                                 ║')
+    console.log('║  WASD/QE = Drive    X = Stop drive    Space = Stop all  ║')
+    console.log('║  1=Clean  2=Pause  3=Dock  4/5=Suction  6=Status       ║')
+    console.log('║  7-0 = Clean rooms    h = Help    Ctrl+C = Quit        ║')
     console.log('╚══════════════════════════════════════════════════════════╝')
     console.log('')
   }

@@ -1,0 +1,3625 @@
+{
+  "vacuum": {
+    "mac": "JA_RO2_7C78B20A8176",
+    "model": "JA_RO2",
+    "name": "Home Vacuum"
+  },
+  "settings": {
+    "pollMs": 2000,
+    "durationS": 120
+  },
+  "baseline": {
+    "status": {
+      "code": 1,
+      "current": 1,
+      "data": {
+        "eventFlag": {
+          "iot_state": "connected",
+          "map_list_update_time": 1771614198784,
+          "memory_map_update_time": 1771614198776,
+          "notice_replace_map": false,
+          "notice_save_map": false,
+          "notice_update_time": 1771766441707,
+          "power_state": 100,
+          "show_mapping_completed": false
+        },
+        "heartBeat": {
+          "battery": 100,
+          "boxType": 1,
+          "charge_state": 1,
+          "clean_level": 3,
+          "clean_preference": 3,
+          "clean_size": 1281,
+          "clean_time": 14,
+          "count": 1771767209394,
+          "current_map_id": 1764371132,
+          "fault_code": 2105,
+          "mode": 0,
+          "modeCount": 1771766454194,
+          "mopType": 0,
+          "vacuumMopPath": null,
+          "waterLevel": null
+        }
+      },
+      "hash": "1",
+      "instance_id": "829f2acb37de8e75c9814ea67aa68f6d",
+      "isShowToast": 0,
+      "message": "Success",
+      "toastMsg": null,
+      "total": 1,
+      "version": 1
+    },
+    "position": {
+      "code": 1,
+      "current": 0,
+      "data": null,
+      "hash": "1",
+      "instance_id": "9d51a26f775c5b2051d95f45f301b760",
+      "isShowToast": 0,
+      "message": "Success",
+      "toastMsg": null,
+      "total": 0,
+      "version": 1
+    },
+    "map": {
+      "code": 1,
+      "current": 1,
+      "data": {
+        "createTime": 1764371144757,
+        "map": "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",
+        "mapId": 1764371132,
+        "mapName": "Map3",
+        "updateTime": 1771614198776,
+        "user_map_name": "Lower floor "
+      },
+      "hash": "1",
+      "instance_id": "7c118a38746f30a5669dcafd6225c5ae",
+      "isShowToast": 0,
+      "message": "Success",
+      "toastMsg": null,
+      "total": 1,
+      "version": 1
+    },
+    "sweep_record": {
+      "code": 1000,
+      "current": 0,
+      "data": null,
+      "hash": "1",
+      "instance_id": "cd1b23f12e2b0f12da93fa3cdb653aca",
+      "isShowToast": 0,
+      "message": "Internal service error",
+      "toastMsg": null,
+      "total": 0,
+      "version": 1
+    },
+    "iot_props_all": {
+      "code": 1,
+      "current": 1,
+      "data": {
+        "did": "JA_RO2_7C78B20A8176",
+        "is_online_send": false,
+        "is_sub_device": false,
+        "is_update_shadow": false,
+        "model": "JA_RO2",
+        "parent_did": null,
+        "parent_model": null,
+        "props": {
+          "current_map_id": 1764371132,
+          "iot_state": "connected"
+        }
+      },
+      "hash": "1",
+      "instance_id": "332071dc8cd7159ddd7a5f06095e17e3",
+      "isShowToast": 0,
+      "message": "Success",
+      "toastMsg": null,
+      "total": 1,
+      "version": 1
+    }
+  },
+  "telemetry": [
+    {
+      "ts": 1771794461099,
+      "elapsed": 1,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 1,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794456080,
+            "current_map_id": 1764371132,
+            "fault_code": 2110,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "1f0c4d0a9923bca13523674993eacbc0",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "edf2a4a1ea3b516d7ffcbe18485937e6",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794463483,
+      "elapsed": 2385,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 1,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794456080,
+            "current_map_id": 1764371132,
+            "fault_code": 2110,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "871d932ced722f12c39ad9afb933d65f",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "0ac3d8b156ea78dc9262a7a35fd11b9c",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794465583,
+      "elapsed": 4485,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794463722,
+            "current_map_id": 1764371132,
+            "fault_code": 2110,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "7954d8f50d409058a3e3e700074527a9",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "b82958f2a0646bc16063cbd4704f4b11",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794467683,
+      "elapsed": 6585,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794463722,
+            "current_map_id": 1764371132,
+            "fault_code": 2110,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "52af2bb1cdb2f41b869fa8b6c1aa5b0d",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "ae40db791af6f600b41f1f9f497f9b89",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794469860,
+      "elapsed": 8762,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794463722,
+            "current_map_id": 1764371132,
+            "fault_code": 2110,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "44455d2154d699a869f98221d7f0493c",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "7dc28470f96cfcf07681b2c75285df30",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794471963,
+      "elapsed": 10865,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794468974,
+            "current_map_id": 1764371132,
+            "fault_code": 2108,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "fcf4d0f03071d688b9e89acd50d8295a",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "0d1c9c31b862fcfb7fdb2ddcb18c5f3e",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794474073,
+      "elapsed": 12975,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794468974,
+            "current_map_id": 1764371132,
+            "fault_code": 2108,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "bce5d27743020244147675ddf209e587",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "7f28885440d4ba3aeaca731b1809ec04",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794476175,
+      "elapsed": 15077,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794468974,
+            "current_map_id": 1764371132,
+            "fault_code": 2108,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "1f7dc1eca1e11336f2a8ef51e08562ee",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "e333285dc0386f2fd177de59d3fc3323",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794478277,
+      "elapsed": 17179,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794468974,
+            "current_map_id": 1764371132,
+            "fault_code": 2108,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "24cecb07285c37c15acdcb448fed92b8",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "c21631a83471ff6653cf9f9fcb08b025",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794480378,
+      "elapsed": 19280,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794468974,
+            "current_map_id": 1764371132,
+            "fault_code": 2108,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "00ae348c51852fb83312218b29b52393",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "2187021156920c3c1cb4298a5a6537f3",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      },
+      "mapUpdateTime": 1771614198776,
+      "iotProps": {
+        "current_map_id": 1764371132,
+        "iot_state": "connected"
+      }
+    },
+    {
+      "ts": 1771794482710,
+      "elapsed": 21612,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794468974,
+            "current_map_id": 1764371132,
+            "fault_code": 2108,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "76d2e5c1be50ea89b4336c61caf5381c",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "898ac7f5a827d4bd96a9a24cca501743",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794484813,
+      "elapsed": 23715,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794468974,
+            "current_map_id": 1764371132,
+            "fault_code": 2108,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "21e2e91e12ec99008a8cfff8a09c1e25",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "8788246c9ec5659bfeaef02e8750a693",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794486916,
+      "elapsed": 25818,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794468974,
+            "current_map_id": 1764371132,
+            "fault_code": 2108,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "ab3954021b572ff50a62291f584f1423",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "2be1a215a71c40a6493431e56b9ce232",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794489033,
+      "elapsed": 27935,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794468974,
+            "current_map_id": 1764371132,
+            "fault_code": 2108,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "377c26af4669265b233ee92e9b48ea8a",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 0,
+        "data": null,
+        "hash": "1",
+        "instance_id": "faa944a7dc4a94da18b933da66412e77",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 0,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794491139,
+      "elapsed": 30041,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "d786313139f52691dd025d756e3911cd",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.278116,
+            "y": -2.065154,
+            "task_id": 1771794454,
+            "pose_id": 1,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "f947a10c4108a63d1468e2439009be11",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794493245,
+      "elapsed": 32147,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "7b9297bbb6181dc4e37e75339c78325f",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.295882,
+            "y": -2.017026,
+            "task_id": 1771794454,
+            "pose_id": 2,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "3e2ffa03cf8056487fb3df4941b6015d",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794496020,
+      "elapsed": 34922,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "465ac50a62185dc31a688f9a8dfbb8e1",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.637906,
+            "y": -1.755093,
+            "task_id": 1771794454,
+            "pose_id": 5,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "bedbf61f267f8af07336c9b11460a27b",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794498182,
+      "elapsed": 37084,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "f596fbea1c0d5c860ec2008344c88c7c",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.856415,
+            "y": -1.576645,
+            "task_id": 1771794454,
+            "pose_id": 7,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "e5e07433bc7f195d4ffda05155053f14",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794500289,
+      "elapsed": 39191,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "d238b8d20842cb4ec55d7e7523d80ab8",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.795698,
+            "y": -1.172731,
+            "task_id": 1771794454,
+            "pose_id": 11,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "d54509917589c4c65a3ec4dab67bac96",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794502389,
+      "elapsed": 41291,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "cc1ae8ba7d0f32222bb736886ac4536d",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.794162,
+            "y": -0.942805,
+            "task_id": 1771794454,
+            "pose_id": 13,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "e472394fb594422133f08d288de3288e",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "mapUpdateTime": 1771614198776,
+      "iotProps": {
+        "current_map_id": 1764371132,
+        "iot_state": "connected"
+      }
+    },
+    {
+      "ts": 1771794504773,
+      "elapsed": 43675,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "689c418c44cf2d5ec5aa8715a9074d05",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 2.114554,
+            "y": -0.67269,
+            "task_id": 1771794454,
+            "pose_id": 16,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "019b5c1427031256b67498126f3a6a89",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794506883,
+      "elapsed": 45785,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "2fb36005eff86a81c9638653c4e02f47",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 2.414701,
+            "y": -0.356608,
+            "task_id": 1771794454,
+            "pose_id": 21,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "7fe0c2430b9bd1e3ef576049ba946a3c",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794508984,
+      "elapsed": 47886,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "d0d564d00a639b9df014ace6f4f0ee8a",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.989955,
+            "y": -0.306881,
+            "task_id": 1771794454,
+            "pose_id": 25,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "a4864ac42ba68d0a6b7a74b76f328874",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794511083,
+      "elapsed": 49985,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "3001b8a8e07ea7f8b3054bac59191968",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.848832,
+            "y": -0.281954,
+            "task_id": 1771794454,
+            "pose_id": 27,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "b8db97f437ea3fc2650c2944b4edbc5d",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794513181,
+      "elapsed": 52083,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "9cc0b63777229dfd8f4960199da0c01e",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.544708,
+            "y": -0.361246,
+            "task_id": 1771794454,
+            "pose_id": 30,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "97768fa45ed09c1c6ab77fddeea30c80",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794515282,
+      "elapsed": 54184,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "97bea59ae3e03dfe89a69b62332154f8",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.193923,
+            "y": -0.128024,
+            "task_id": 1771794454,
+            "pose_id": 34,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "675a2a7cb8af1406a60101d86951e0cb",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794517395,
+      "elapsed": 56297,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "8a46173b4eb957b34bd03ec56267ba7a",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 0.836115,
+            "y": -0.068052,
+            "task_id": 1771794454,
+            "pose_id": 37,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "ecdfaa8d986f096058509048164ee6c7",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794519588,
+      "elapsed": 58490,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 100,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 0,
+            "count": 1771794486988,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "334671ac61e018d1111b9f45d7162fa3",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 0.369837,
+            "y": -0.020386,
+            "task_id": 1771794454,
+            "pose_id": 41,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "a9d57c1201c5a8a6cb69f9e306b8d9b9",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794521772,
+      "elapsed": 60674,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 99,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794519058,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "a442ce77781d37d119c14fd4515669e2",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 0.149009,
+            "y": -0.004562,
+            "task_id": 1771794454,
+            "pose_id": 43,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "0a6fe5bfd4d237caf8cc39b2ee48d510",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794523879,
+      "elapsed": 62781,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 99,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794519058,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "c8ca5c9ebbaa36751b044eef7a059dde",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 0.13633,
+            "y": -0.003235,
+            "task_id": 1771794454,
+            "pose_id": 46,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "ee9a381da3ad6c048212a7fdf79344f1",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "mapUpdateTime": 1771614198776,
+      "iotProps": {
+        "current_map_id": 1764371132,
+        "iot_state": "connected"
+      }
+    },
+    {
+      "ts": 1771794526210,
+      "elapsed": 65112,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 99,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794519058,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "c08362d90ba37d26b2e9ac4a15b4cce3",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 0.364717,
+            "y": 0.020637,
+            "task_id": 1771794454,
+            "pose_id": 50,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "e2c73f2da1b2c4b4f60a7a20f99215a7",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794528310,
+      "elapsed": 67212,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "3df39c06719d5ae1e8b0ca2cb3a6c990",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 0.801969,
+            "y": -0.000887,
+            "task_id": 1771794454,
+            "pose_id": 54,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "1f70852e1c40655e497816da5248628d",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794530408,
+      "elapsed": 69310,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "cbadd732f7b3017a14854b84038ee624",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 0.909379,
+            "y": -0.010284,
+            "task_id": 1771794454,
+            "pose_id": 55,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "8da83e4019c1c1ddec0635a7358414e1",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794532521,
+      "elapsed": 71423,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "5c54b5131e8b85c778ab3f76b562486f",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.197236,
+            "y": -0.1404,
+            "task_id": 1771794454,
+            "pose_id": 59,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "ba1c169768fb70ca356fc644ef422867",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794534621,
+      "elapsed": 73523,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "e7f4640d9b7582fe925aef4539730820",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.338472,
+            "y": -0.043337,
+            "task_id": 1771794454,
+            "pose_id": 61,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "e7f4640d9b7582fe925aef4539730820",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794536717,
+      "elapsed": 75619,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "31ac570a4746b4bf08134c04ce269871",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.541897,
+            "y": -0.013868,
+            "task_id": 1771794454,
+            "pose_id": 63,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "c0aa2f1fb8b76205ba50d50d5f0bb07e",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794538819,
+      "elapsed": 77721,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "422f48bd86982dbb2398b3d68a385c3c",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.639594,
+            "y": -0.022435,
+            "task_id": 1771794454,
+            "pose_id": 65,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "da0fd0bc31dd78785ed79b1df09f68c3",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794540918,
+      "elapsed": 79820,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "1f4606181f359ee65be0f2a1be41fa08",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.891103,
+            "y": -0.138072,
+            "task_id": 1771794454,
+            "pose_id": 68,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "572b714aa5e8882d8a649012cf09bd43",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794543017,
+      "elapsed": 81919,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "4eee5aed62a0481652a71faffb0b04de",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 1.81918,
+            "y": -0.183554,
+            "task_id": 1771794454,
+            "pose_id": 69,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "3ab06afde47832cce87e3445d01c66e6",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794545120,
+      "elapsed": 84022,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "69237f0fb34f4c9d8591e089f0bfba84",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 2.090864,
+            "y": -0.151593,
+            "task_id": 1771794454,
+            "pose_id": 72,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "24e20a8ef3da20c47b3943eb801ec526",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "mapUpdateTime": 1771614198776,
+      "iotProps": {
+        "current_map_id": 1764371132,
+        "iot_state": "connected"
+      }
+    },
+    {
+      "ts": 1771794547472,
+      "elapsed": 86374,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "8014b8d5b2580a0fb1be5dc893cd5632",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 2.141737,
+            "y": -0.07702,
+            "task_id": 1771794454,
+            "pose_id": 75,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "85163d51418cdeb5723b9d05b42ef392",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794549571,
+      "elapsed": 88473,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "93bfb48b9286c0fdd609387accc573c0",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 2.263632,
+            "y": -0.060651,
+            "task_id": 1771794454,
+            "pose_id": 76,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "599d6eb8e3dec362742a1d6b321dabe7",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794551679,
+      "elapsed": 90581,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "55fd46f9efd22ef4e9ebeede6fc7fec4",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 2.47094,
+            "y": -0.067428,
+            "task_id": 1771794454,
+            "pose_id": 78,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "0031258237f880d09121bbbbe32a2e98",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794553785,
+      "elapsed": 92687,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "51d03bf4796022ec3cd6e37a2d3d4868",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 2.703874,
+            "y": -0.058266,
+            "task_id": 1771794454,
+            "pose_id": 80,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "a24238229f2fa0a43960a12e23a54d39",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794555887,
+      "elapsed": 94789,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "1ee02b466827e8907f2bd23d263f4bb6",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 2.703874,
+            "y": -0.058266,
+            "task_id": 1771794454,
+            "pose_id": 80,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "594561650927dcb78d5add0adb04d834",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794557985,
+      "elapsed": 96887,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "6f47426559077371d8f6ee3de95ac43b",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 2.73566,
+            "y": -0.057463,
+            "task_id": 1771794454,
+            "pose_id": 81,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "3287da255a7e16d344874fe73cabaa8b",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794560085,
+      "elapsed": 98987,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "bf6dd6ab252b1447e59c514e8e27404a",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 3.044986,
+            "y": -0.005251,
+            "task_id": 1771794454,
+            "pose_id": 85,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "829ff7d30158bb0fc2cc91faceba7887",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794562185,
+      "elapsed": 101087,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "c2a617a783a124358611ad49d5f73200",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 3.069157,
+            "y": 0.019305,
+            "task_id": 1771794454,
+            "pose_id": 88,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "5e8323e2d428fc29616392df063238eb",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794564285,
+      "elapsed": 103187,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "3849120f1942833496654fdb80eb1d6b",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 3.170605,
+            "y": -0.043828,
+            "task_id": 1771794454,
+            "pose_id": 89,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "ee7bc7484cd1cec64eba3784b708aab7",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794566388,
+      "elapsed": 105290,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "1b97141699b92b289ee764108ce0d412",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 3.476765,
+            "y": 0.046507,
+            "task_id": 1771794454,
+            "pose_id": 92,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "0a586912238465f072cca60ef1fe5f1a",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "mapUpdateTime": 1771614198776,
+      "iotProps": {
+        "current_map_id": 1764371132,
+        "iot_state": "connected"
+      }
+    },
+    {
+      "ts": 1771794568708,
+      "elapsed": 107610,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "aa640f3c5228186b7c94f245be731fa9",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 3.782488,
+            "y": 0.322233,
+            "task_id": 1771794454,
+            "pose_id": 95,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "4d11a74f8373cf66997d7c65a818af30",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794570809,
+      "elapsed": 109711,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "8e82d45eabbb49a07a2c6af24abeaabf",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 3.883899,
+            "y": 0.342503,
+            "task_id": 1771794454,
+            "pose_id": 97,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "fe9e3bfffe9a3e43fcdae46e7a9d6ded",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794572921,
+      "elapsed": 111823,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "8fa6778251b606c4b3506cc0d1f8f7d2",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 4.014445,
+            "y": 0.518897,
+            "task_id": 1771794454,
+            "pose_id": 100,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "95b6cb52ec6c5ad3a6f6fef9ea5d8748",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794575023,
+      "elapsed": 113925,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "64b7ce8387c23574011243f8444b494b",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 3.910888,
+            "y": 0.564557,
+            "task_id": 1771794454,
+            "pose_id": 102,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "665dbaab49b23fa5a7191db6219557d2",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794577126,
+      "elapsed": 116028,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "52a6cec1bc96be13587fdd1ebe4a68f1",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 3.92419,
+            "y": 0.565813,
+            "task_id": 1771794454,
+            "pose_id": 105,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "baf35bff73368cd1aede8d28b6a165cf",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    },
+    {
+      "ts": 1771794579244,
+      "elapsed": 118146,
+      "status": {
+        "code": 1,
+        "current": 1,
+        "data": {
+          "eventFlag": {
+            "iot_state": "connected",
+            "map_list_update_time": 1771614198784,
+            "memory_map_update_time": 1771614198776,
+            "notice_replace_map": false,
+            "notice_save_map": false,
+            "notice_update_time": 1771794456652,
+            "power_state": 100,
+            "show_mapping_completed": false
+          },
+          "heartBeat": {
+            "battery": 98,
+            "boxType": 1,
+            "charge_state": 0,
+            "clean_level": 3,
+            "clean_preference": 3,
+            "clean_size": 0,
+            "clean_time": 1,
+            "count": 1771794524906,
+            "current_map_id": 1764371132,
+            "fault_code": 0,
+            "mode": 1,
+            "modeCount": 1771794455097,
+            "mopType": 0,
+            "vacuumMopPath": null,
+            "waterLevel": null
+          }
+        },
+        "hash": "1",
+        "instance_id": "30773fe7096e13338951fdbda48bb7b0",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      },
+      "position": {
+        "code": 1,
+        "current": 1,
+        "data": [
+          {
+            "x": 3.907684,
+            "y": 0.582783,
+            "task_id": 1771794454,
+            "pose_id": 110,
+            "is_show": 0
+          }
+        ],
+        "hash": "1",
+        "instance_id": "72dad1514fa21e44182d9e0ee1497b7b",
+        "isShowToast": 0,
+        "message": "Success",
+        "toastMsg": null,
+        "total": 1,
+        "version": 1
+      }
+    }
+  ],
+  "summary": {
+    "totalPolls": 56,
+    "durationMs": 120246,
+    "uniquePositions": 41,
+    "modeChanges": 0
+  }
+}
