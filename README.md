@@ -66,3 +66,30 @@ Use this helper methods to interact with wyze-node.
 - wyze.setProperty(deviceMac, deviceModel, propertyId, propertyValue)
 
 
+## 🤖 Vacuum Xbox Controller (WIP)
+
+Control your Wyze robot vacuum with an Xbox controller for real-time directional movement.
+
+### Tools
+
+**1. Scan your vacuum's capabilities:**
+```bash
+WYZE_EMAIL=you@email.com WYZE_PASSWORD=yourpass node tools/scan-vacuum.js
+```
+
+**2. Intercept Wyze app traffic (discover movement protocol):**
+```bash
+./tools/start-capture.sh
+```
+Then configure your phone to proxy through your Mac and interact with the vacuum in the Wyze app.
+
+**3. Test Xbox controller input:**
+```bash
+node tools/xbox-controller.js
+```
+Uses keyboard (WASD) as fallback if no controller detected.
+
+**4. Drive the vacuum (once protocol is discovered):**
+```bash
+WYZE_EMAIL=you@email.com WYZE_PASSWORD=yourpass node tools/vacuum-controller.js
+```

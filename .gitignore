@@ -61,4 +61,5 @@ typings/
 .next
 
 # token storage
-example/scratch
+example/scratchcaptured-traffic/
+scratch/
