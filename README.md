@@ -9,8 +9,6 @@ This is an unofficial Wyze API. This library uses the internal APIs from the Wyz
 const Wyze = require('wyze-node')
 
 const options = {
-  username: process.env.username,
-  password: process.env.password,
   keyId: process.env.WYZE_KEY_ID,     // from https://developer-api-console.wyze.com
   apiKey: process.env.WYZE_API_KEY,   // from https://developer-api-console.wyze.com
 }
@@ -37,7 +35,9 @@ const wyze = new Wyze(options)
 ```
 
 ## Run
-`username=first.last@email.om password=123456 node index.js`
+`WYZE_KEY_ID=your-key-id WYZE_API_KEY=your-api-key node index.js`
+
+On first run, you'll be prompted for your Wyze email and password. Tokens are cached locally so you won't need to enter them again.
 
 ## Helper methods
 

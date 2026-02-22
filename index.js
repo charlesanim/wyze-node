@@ -4,26 +4,28 @@ const md5 = require('md5')
 const moment = require('moment')
 const LocalStorage = require('node-localstorage').LocalStorage
 const localStorage = new LocalStorage('./scratch')
+const readline = require('readline')
 
 class Wyze {
   /**
    * @param {object} options
+   * @param {string} options.keyId - Wyze Developer API Key ID (required)
+   * @param {string} options.apiKey - Wyze Developer API Key (required)
+   * @param {string} [options.username] - Wyze account email (prompted if not provided)
+   * @param {string} [options.password] - Wyze account password (prompted if not provided)
    * @constructor
    */
   constructor(options) {
-    this.username = options.username
-    this.password = options.password
-    this.keyId = options.keyId || ''
-    this.apiKey = options.apiKey || ''
-    this.xApiKey = options.xApiKey || 'WMXHYf79Nr5gIlt3r0r7p9Tcw5bvs6BB4U8O8nGJ'
-    this.userAgent = options.userAgent || 'wyze_ios_2.21.35'
-    this.phoneId = options.phoneId || 'bc151f39-787b-4871-be27-5a20fd0a1937'
+    this.username = options.username || ''
+    this.password = options.password || ''
+    this.keyId = options.keyId
+    this.apiKey = options.apiKey
+    if (!this.keyId || !this.apiKey) {
+      throw new Error('keyId and apiKey are required. Get them at https://developer-api-console.wyze.com')
+    }
     this.authUrl = options.authUrl || 'https://auth-prod.api.wyze.com'
     this.baseUrl = options.baseUrl || 'https://api.wyzecam.com:8443'
     this.baseV1Url = options.baseV1Url || 'https://beta-ams-api.wyzecam.com'
-    this.appVer = options.appVer || 'com.hualai.WyzeCam___2.3.69'
-    this.sc = '9f275790cab94a72bd206c8876429f3c'
-    this.sv = '9d74946e652647e9b6c9d59326aef104',
     this.scV1 = 'a9ecb0f8ea7b4da2b6ab56542403d769'
     this.svV1 = '668988518a6a47fc9c0ef75b0164cfd6'
     this.accessToken = options.accessToken || ''
@@ -34,13 +36,12 @@ class Wyze {
   * get request data
   */
   async getRequestBodyData(data = {}) {
-    const isDevApi = !!(this.keyId && this.apiKey)
     return {
       access_token: this.accessToken,
-      phone_id: isDevApi ? 'wyze_developer_api' : this.phoneId,
-      app_ver: isDevApi ? 'wyze_developer_api' : this.appVer,
-      sc: isDevApi ? 'wyze_developer_api' : this.sc,
-      sv: isDevApi ? 'wyze_developer_api' : this.sv,
+      phone_id: 'wyze_developer_api',
+      app_ver: 'wyze_developer_api',
+      sc: 'wyze_developer_api',
+      sv: 'wyze_developer_api',
       ts: moment().valueOf(),
       ...data,
     }
@@ -65,44 +66,68 @@ class Wyze {
   }
 
   /**
+   * Prompt for input from terminal
+   * @private
+   */
+  async _prompt(question, hidden = false) {
+    const rl = readline.createInterface({ input: process.stdin, output: process.stderr })
+    return new Promise((resolve) => {
+      if (hidden) {
+        process.stderr.write(question)
+        const stdin = process.stdin
+        const wasRaw = stdin.isRaw
+        if (stdin.isTTY) stdin.setRawMode(true)
+        let input = ''
+        const onData = (ch) => {
+          const c = ch.toString()
+          if (c === '\n' || c === '\r') {
+            stdin.removeListener('data', onData)
+            if (stdin.isTTY && wasRaw !== undefined) stdin.setRawMode(wasRaw)
+            process.stderr.write('\n')
+            rl.close()
+            resolve(input)
+          } else if (c === '\u0003') {
+            process.exit()
+          } else if (c === '\u007f' || c === '\b') {
+            input = input.slice(0, -1)
+          } else {
+            input += c
+          }
+        }
+        stdin.on('data', onData)
+      } else {
+        rl.question(question, (answer) => { rl.close(); resolve(answer) })
+      }
+    })
+  }
+
+  /**
    * login to get access_token
+   * Uses API key + credentials. Prompts for email/password if not provided.
    * @returns {data}
    */
   async login() {
     let result
     try {
+      if (!this.username) {
+        this.username = await this._prompt('Wyze email: ')
+      }
+      if (!this.password) {
+        this.password = await this._prompt('Wyze password: ', true)
+      }
 
       const data = {
         email: this.username,
         password: md5(md5(md5((this.password)))),
       }
 
-      let options
-      let loginUrl
-
-      if (this.keyId && this.apiKey) {
-        // Official Wyze Developer API key auth
-        loginUrl = `${this.authUrl}/api/user/login`
-        options = {
-          headers: {
-            'Keyid': this.keyId,
-            'Apikey': this.apiKey,
-            'Content-Type': 'application/json',
-          }
+      result = await axios.post(`${this.authUrl}/api/user/login`, await this.getRequestBodyData(data), {
+        headers: {
+          'Keyid': this.keyId,
+          'Apikey': this.apiKey,
+          'Content-Type': 'application/json',
         }
-      } else {
-        // Legacy app-based auth
-        loginUrl = `${this.authUrl}/v3/user/login`
-        options = {
-          headers: {
-            'x-api-key': this.xApiKey,
-            'user-agent': this.userAgent,
-            'phone-id': this.phoneId,
-          }
-        }
-      }
-
-      result = await axios.post(loginUrl, await this.getRequestBodyData(data), options)
+      })
       this.setTokens(result.data['access_token'], result.data['refresh_token'])
     }
     catch (e) {
