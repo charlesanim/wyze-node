@@ -10,7 +10,9 @@ const Wyze = require('wyze-node')
 
 const options = {
   username: process.env.username,
-  password: process.env.password
+  password: process.env.password,
+  keyId: process.env.WYZE_KEY_ID,     // from https://developer-api-console.wyze.com
+  apiKey: process.env.WYZE_API_KEY,   // from https://developer-api-console.wyze.com
 }
 const wyze = new Wyze(options)
 
@@ -74,7 +76,7 @@ Control your Wyze robot vacuum with an Xbox controller for real-time directional
 
 **1. Scan your vacuum's capabilities:**
 ```bash
-WYZE_EMAIL=you@email.com WYZE_PASSWORD=yourpass node tools/scan-vacuum.js
+WYZE_EMAIL=x WYZE_PASSWORD=x WYZE_KEY_ID=x WYZE_API_KEY=x node tools/scan-vacuum.js
 ```
 
 **2. Intercept Wyze app traffic (discover movement protocol):**
@@ -91,5 +93,5 @@ Uses keyboard (WASD) as fallback if no controller detected.
 
 **4. Drive the vacuum (once protocol is discovered):**
 ```bash
-WYZE_EMAIL=you@email.com WYZE_PASSWORD=yourpass node tools/vacuum-controller.js
+WYZE_EMAIL=x WYZE_PASSWORD=x WYZE_KEY_ID=x WYZE_API_KEY=x node tools/vacuum-controller.js
 ```

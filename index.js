@@ -13,10 +13,12 @@ class Wyze {
   constructor(options) {
     this.username = options.username
     this.password = options.password
+    this.keyId = options.keyId || ''
+    this.apiKey = options.apiKey || ''
     this.xApiKey = options.xApiKey || 'WMXHYf79Nr5gIlt3r0r7p9Tcw5bvs6BB4U8O8nGJ'
     this.userAgent = options.userAgent || 'wyze_ios_2.21.35'
     this.phoneId = options.phoneId || 'bc151f39-787b-4871-be27-5a20fd0a1937'
-    this.authUrl = options.authUrl || 'https://auth-prod.api.wyze.com/v3'
+    this.authUrl = options.authUrl || 'https://auth-prod.api.wyze.com'
     this.baseUrl = options.baseUrl || 'https://api.wyzecam.com:8443'
     this.baseV1Url = options.baseV1Url || 'https://beta-ams-api.wyzecam.com'
     this.appVer = options.appVer || 'com.hualai.WyzeCam___2.3.69'
@@ -32,12 +34,13 @@ class Wyze {
   * get request data
   */
   async getRequestBodyData(data = {}) {
+    const isDevApi = !!(this.keyId && this.apiKey)
     return {
       access_token: this.accessToken,
-      phone_id: this.phoneId,
-      app_ver: this.appVer,
-      sc: this.sc,
-      sv: this.sv,
+      phone_id: isDevApi ? 'wyze_developer_api' : this.phoneId,
+      app_ver: isDevApi ? 'wyze_developer_api' : this.appVer,
+      sc: isDevApi ? 'wyze_developer_api' : this.sc,
+      sv: isDevApi ? 'wyze_developer_api' : this.sv,
       ts: moment().valueOf(),
       ...data,
     }
@@ -74,15 +77,32 @@ class Wyze {
         password: md5(md5(md5((this.password)))),
       }
 
-     let options = {
-       headers: {
-        'x-api-key': this.xApiKey,
-        'user-agent': this.userAgent,
-        'phone-id': this.phoneId,
-       }
-     }
+      let options
+      let loginUrl
 
-      result = await axios.post(`${this.authUrl}/user/login`, await this.getRequestBodyData(data), await options)
+      if (this.keyId && this.apiKey) {
+        // Official Wyze Developer API key auth
+        loginUrl = `${this.authUrl}/api/user/login`
+        options = {
+          headers: {
+            'Keyid': this.keyId,
+            'Apikey': this.apiKey,
+            'Content-Type': 'application/json',
+          }
+        }
+      } else {
+        // Legacy app-based auth
+        loginUrl = `${this.authUrl}/v3/user/login`
+        options = {
+          headers: {
+            'x-api-key': this.xApiKey,
+            'user-agent': this.userAgent,
+            'phone-id': this.phoneId,
+          }
+        }
+      }
+
+      result = await axios.post(loginUrl, await this.getRequestBodyData(data), options)
       this.setTokens(result.data['access_token'], result.data['refresh_token'])
     }
     catch (e) {

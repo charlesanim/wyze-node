@@ -117,13 +117,15 @@ class VacuumController {
 async function main() {
   const email = process.env.WYZE_EMAIL
   const password = process.env.WYZE_PASSWORD
+  const keyId = process.env.WYZE_KEY_ID
+  const apiKey = process.env.WYZE_API_KEY
 
   if (!email || !password) {
-    console.error('Usage: WYZE_EMAIL=you@email.com WYZE_PASSWORD=yourpass node tools/vacuum-controller.js')
+    console.error('Usage: WYZE_EMAIL=x WYZE_PASSWORD=x WYZE_KEY_ID=x WYZE_API_KEY=x node tools/vacuum-controller.js')
     process.exit(1)
   }
 
-  const wyze = new Wyze({ username: email, password: password })
+  const wyze = new Wyze({ username: email, password: password, keyId, apiKey })
 
   console.log('🔑 Logging in...')
   await wyze.login()
