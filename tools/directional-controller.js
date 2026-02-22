@@ -39,14 +39,16 @@ const readline = require('readline')
 const POSITION_POLL_MS = 2000
 const GAMEPAD_POLL_MS = 50    // 20Hz input polling
 const STEP_DISTANCE = 0.5    // Meters per directional command
-const DEAD_ZONE = 0.15
+const DEAD_ZONE = 0.25       // High dead zone — Xbox Series X sticks drift
+const DRIVE_THRESHOLD = 0.4  // Stick must be pushed past this to engage driving
 const SUCTION_LABELS = ['', 'Quiet', 'Standard', 'Strong']
 const MODE_LABELS = {
   0: 'Idle', 1: 'Cleaning', 4: 'Paused', 5: 'Returning',
   7: 'Sweeping', 9: 'Paused', 10: 'Finished', 11: 'Docked',
   14: 'Idle', 25: 'Sweeping', 27: 'Paused', 29: 'Idle',
-  30: 'Cleaning', 31: 'Paused', 35: 'Idle', 36: 'Sweeping',
-  37: 'Paused', 39: 'Breakpoint', 40: 'Idle', 45: 'Mapping',
+  30: 'Cleaning', 31: 'Paused', 32: 'Returning', 35: 'Idle',
+  36: 'Sweeping', 37: 'Paused', 39: 'Breakpoint', 40: 'Idle',
+  45: 'Mapping',
 }
 
 // Standard Gamepad button indices (W3C mapping)
@@ -129,11 +131,16 @@ class DirectionalController {
 
     this.busy = true
     try {
-      await this.venus.areaClean(this.did, [target])
+      const result = await this.venus.areaClean(this.did, [target])
+      // Check if the API actually acted on it (code 1 = success, but vacuum may ignore coords)
+      if (result.code !== 1) {
+        console.log(`\n⚠️  Area clean response code: ${result.code} — ${result.message}`)
+      }
     } catch (e) {
       if (!this._areaCleanFailed) {
         console.log(`\n⚠️  Area clean not supported: ${e.response?.data?.message || e.message}`)
-        console.log('   Firmware may need update for coordinate-based steering.')
+        console.log('   Your firmware (1.6.55) may not support coordinate-based steering.')
+        console.log('   Firmware 1.6.173+ required. Use room-level control instead.')
         this._areaCleanFailed = true
         this.driving = false
       }
@@ -145,18 +152,37 @@ class DirectionalController {
   // ── Xbox Controller Input ──
 
   processGamepadInput(gamepad) {
-    // Left stick → direction
+    // Left stick → direction (with aggressive dead zone)
     let lx = gamepad.axes[0] || 0
     let ly = gamepad.axes[1] || 0
     lx = Math.abs(lx) < DEAD_ZONE ? 0 : lx
     ly = Math.abs(ly) < DEAD_ZONE ? 0 : -ly  // invert Y: stick up = forward
 
     const mag = Math.min(1, Math.sqrt(lx * lx + ly * ly))
-    if (mag > DEAD_ZONE) {
-      this.driving = true
+
+    if (mag > DRIVE_THRESHOLD) {
+      // Stick pushed hard enough — engage/update driving
+      if (!this.driving) {
+        this.driving = true
+        const angle = (Math.atan2(lx, ly) * 180 / Math.PI).toFixed(0)
+        console.log(`\n🚗 Driving engaged (${angle}°)`)
+      }
       this.direction = { dx: lx / mag, dy: ly / mag }
-    } else {
-      this.direction = { dx: 0, dy: 0 }
+      this._stickReleaseTime = null
+    } else if (this.driving) {
+      // Stick returned to center — auto-disengage after 500ms
+      if (!this._stickReleaseTime) {
+        this._stickReleaseTime = Date.now()
+      } else if (Date.now() - this._stickReleaseTime > 500) {
+        this.driving = false
+        this.direction = { dx: 0, dy: 0 }
+        this._stickReleaseTime = null
+        // Don't spam "stopped" messages
+        if (!this._lastStopMsg || Date.now() - this._lastStopMsg > 2000) {
+          console.log('\n⏹️  Stick released — driving stopped')
+          this._lastStopMsg = Date.now()
+        }
+      }
     }
 
     // Button presses (edge-triggered: fire only on press, not hold)
@@ -222,12 +248,17 @@ class DirectionalController {
   _updateHUD(stickMag) {
     const pos = this.position
       ? `(${this.position.x.toFixed(2)},${this.position.y.toFixed(2)})`
-      : '(?,?)'
-    const modeStr = this.driving ? '🚗 DRIVING' : (MODE_LABELS[this.mode] || `mode:${this.mode}`)
-    const stickDir = stickMag > DEAD_ZONE
-      ? ` stick:${(Math.atan2(this.direction.dx, this.direction.dy) * 180 / Math.PI).toFixed(0)}°`
+      : '(—,—)'
+    const modeStr = this.driving
+      ? '🚗 DRIVE'
+      : (MODE_LABELS[this.mode] || `mode:${this.mode}`)
+    const stick = stickMag > DEAD_ZONE
+      ? ` 🕹️${(Math.atan2(this.direction.dx, this.direction.dy) * 180 / Math.PI).toFixed(0)}° ${(stickMag * 100).toFixed(0)}%`
       : ''
-    process.stdout.write(`\r📍${pos} ${modeStr} 🔋${this.battery}%${stickDir}         `)
+    const room = this.rooms[this.selectedRoom]
+      ? ` [${this.rooms[this.selectedRoom].room_name}]`
+      : ''
+    process.stdout.write(`\r📍${pos} ${modeStr} 🔋${this.battery}%${stick}${room}          `)
   }
 
   // ── Keyboard Fallback ──
@@ -337,16 +368,19 @@ class DirectionalController {
     console.log('')
     console.log('╔══════════════════════════════════════════════════════════╗')
     console.log('║  🎮 XBOX CONTROLLER                                     ║')
-    console.log('║  Left Stick  = Drive (360°)                             ║')
-    console.log('║  A = Clean    B = Pause    X = Stop drive    Y = Dock   ║')
-    console.log('║  LB = Suction ↓    RB = Suction ↑                       ║')
-    console.log('║  D-Pad ↑↓ = Select room    D-Pad → = Clean room        ║')
-    console.log('║  Start = Status    Back = Quick Map                     ║')
+    console.log('║                                                          ║')
+    console.log('║  A = Start Clean       B = Pause                        ║')
+    console.log('║  Y = Return to Dock    X = Stop driving                 ║')
+    console.log('║  LB = Suction ↓        RB = Suction ↑                    ║')
+    console.log('║  D-Pad ↑↓ = Select room                                 ║')
+    console.log('║  D-Pad →  = Clean selected room                         ║')
+    console.log('║  Start = Status        Back = Quick Map                 ║')
+    console.log('║                                                          ║')
+    console.log('║  Left Stick = Directional steering *                    ║')
+    console.log('║  * Requires firmware ≥ 1.6.173 for coordinate steering  ║')
     console.log('╠══════════════════════════════════════════════════════════╣')
-    console.log('║  ⌨️  KEYBOARD (fallback)                                 ║')
-    console.log('║  WASD/QE = Drive    X = Stop drive    Space = Stop all  ║')
-    console.log('║  1=Clean  2=Pause  3=Dock  4/5=Suction  6=Status       ║')
-    console.log('║  7-0 = Clean rooms    h = Help    Ctrl+C = Quit        ║')
+    console.log('║  ⌨️  KEYBOARD: WASD=Drive  1=Clean 2=Pause 3=Dock       ║')
+    console.log('║  4/5=Suction  6=Status  7-0=Rooms  h=Help  Ctrl+C=Quit ║')
     console.log('╚══════════════════════════════════════════════════════════╝')
     console.log('')
   }
