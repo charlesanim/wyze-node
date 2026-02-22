@@ -160,6 +160,29 @@ class VenusService {
     return this._get('/plugin/venus/memory_map/list', { did })
   }
 
+  async getSweepRecords(did, limit = 10) {
+    return this._get('/plugin/venus/sweep_record/query_data', { did, limit })
+  }
+
+  async setCurrentMap(did, mapId) {
+    return this._post('/plugin/venus/memory_map/set_current_map', { did, map_id: mapId })
+  }
+
+  /**
+   * Area clean with x,y map coordinates.
+   * Note: May require firmware >= 1.6.173 for full coordinate support.
+   * @param {string} did - Device MAC
+   * @param {Array<{x: number, y: number}>} points - Map coordinates
+   */
+  async areaClean(did, points) {
+    return this._post(`/plugin/venus/${did}/control`, {
+      type: ControlType.AREA_CLEAN,
+      value: ControlValue.START,
+      vacuumMopMode: 0,
+      area_point_list: points,
+    })
+  }
+
   // ── IoT Actions ──
 
   async setIotAction(did, model, cmd, params) {
