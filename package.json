@@ -24,6 +24,7 @@
     "md5": "^2.2.1",
     "moment": "^2.24.0",
     "node-hid": "^3.3.0",
-    "node-localstorage": "^2.1.6"
+    "node-localstorage": "^2.1.6",
+    "uuid": "^13.0.0"
   }
 }

@@ -191,6 +191,9 @@ function startKeyboardMode(controller) {
     if (key.name === '1') controller.emit('action', { action: 'start_clean' })
     if (key.name === '2') controller.emit('action', { action: 'pause' })
     if (key.name === '3') controller.emit('action', { action: 'dock' })
+    if (key.name === '4') controller.emit('action', { action: 'suction_down' })
+    if (key.name === '5') controller.emit('action', { action: 'suction_up' })
+    if (key.name === '6') controller.emit('action', { action: 'status' })
   })
 }
 

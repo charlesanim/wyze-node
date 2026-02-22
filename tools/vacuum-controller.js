@@ -4,91 +4,94 @@
  * Connects Xbox controller input to Wyze vacuum movement commands.
  * 
  * Usage:
- *   WYZE_EMAIL=you@email.com WYZE_PASSWORD=yourpass node tools/vacuum-controller.js
- * 
- * This is the integration layer that will be completed once we discover
- * the movement protocol from mitmproxy analysis.
+ *   WYZE_KEY_ID=x WYZE_API_KEY=x node tools/vacuum-controller.js
  */
 'use strict'
 
 const Wyze = require('../index')
+const { VenusService, ControlType, ControlValue } = require('../venus')
 const { XboxController } = require('./xbox-controller')
 
 class VacuumController {
-  constructor(wyze, vacuumDevice) {
+  constructor(wyze, venus, vacuumDevice) {
     this.wyze = wyze
+    this.venus = venus
     this.vacuum = vacuumDevice
     this.controller = new XboxController()
     this.isMoving = false
     this.lastCommand = null
-    this.commandInterval = null
+    this.suctionLevel = 2 // 1=quiet, 2=standard, 3=strong
   }
 
+  get did() { return this.vacuum.mac }
+  get model() { return this.vacuum.product_model }
+
   /**
-   * Send a movement command to the vacuum.
-   * TODO: Replace with actual API calls once we discover the protocol.
+   * Send a movement command to the vacuum via Venus set_iot_action.
+   * Uses set_mode with direction/speed parameters.
    */
   async sendMovement(movement) {
     if (movement.direction === 'stop' && !this.isMoving) return
-    
-    const mac = this.vacuum.mac
-    const model = this.vacuum.product_model
 
-    // PLACEHOLDER: These property IDs and values need to be discovered
-    // via mitmproxy traffic analysis. The actual implementation depends on
-    // what we find in the captured API calls.
-    //
-    // Possible approaches:
-    // 1. setProperty() with discovered movement property IDs
-    // 2. runAction() with discovered action keys
-    // 3. Direct venus-service API calls (requires Signature2)
-    // 4. Local MQTT/UDP commands
-
-    console.log(`[VACUUM] ${movement.direction} speed:${movement.speed} turn:${movement.turnRate}`)
-
-    // Example of what the final implementation might look like:
-    // await this.wyze.setProperty(mac, model, 'P1612', movement.speed)
-    // await this.wyze.setProperty(mac, model, 'P1613', movement.turnRate)
-    // 
-    // Or:
-    // await this.wyze.runAction(mac, model, `manual_${movement.direction}`)
-    //
-    // Or for venus-service:
-    // await this.sendVenusCommand({ type: 'move', x: movement.raw.x, y: movement.raw.y })
+    try {
+      // Use set_iot_action with manual control parameters
+      // The vacuum interprets these as motor commands
+      await this.venus.setIotAction(this.did, this.model, 'set_mode', {
+        type: 'manual',
+        direction: movement.direction,
+        speed: movement.speed,
+        turn_rate: movement.turnRate,
+      })
+    } catch (e) {
+      // Don't spam errors during rapid input
+      if (!this._lastError || Date.now() - this._lastError > 2000) {
+        console.error(`\n⚠️  Movement error: ${e.response?.data?.message || e.message}`)
+        this._lastError = Date.now()
+      }
+    }
 
     this.isMoving = movement.direction !== 'stop'
     this.lastCommand = movement
   }
 
   /**
-   * High-level vacuum actions
+   * High-level vacuum actions via Venus service
    */
   async executeAction(action) {
-    const mac = this.vacuum.mac
-    const model = this.vacuum.product_model
-
-    switch (action.action) {
-      case 'start_clean':
-        console.log('[VACUUM] Starting clean cycle...')
-        await this.wyze.runAction(mac, model, 'power_on')
-        break
-      case 'pause':
-        console.log('[VACUUM] Pausing...')
-        // TODO: discover pause action key
-        break
-      case 'dock':
-        console.log('[VACUUM] Returning to dock...')
-        // TODO: discover dock action key
-        break
-      case 'suction_up':
-        console.log('[VACUUM] Suction level up')
-        // TODO: discover suction property
-        break
-      case 'suction_down':
-        console.log('[VACUUM] Suction level down')
-        break
-      default:
-        console.log(`[VACUUM] Unknown action: ${action.action}`)
+    try {
+      switch (action.action) {
+        case 'start_clean':
+          console.log('\n🧹 Starting clean cycle...')
+          await this.venus.clean(this.did)
+          break
+        case 'pause':
+          console.log('\n⏸️  Pausing...')
+          await this.venus.pause(this.did)
+          break
+        case 'dock':
+          console.log('\n🏠 Returning to dock...')
+          await this.venus.dock(this.did)
+          break
+        case 'suction_up':
+          this.suctionLevel = Math.min(3, this.suctionLevel + 1)
+          console.log(`\n🔊 Suction: ${['', 'quiet', 'standard', 'strong'][this.suctionLevel]}`)
+          await this.venus.setSuctionLevel(this.did, this.model, this.suctionLevel)
+          break
+        case 'suction_down':
+          this.suctionLevel = Math.max(1, this.suctionLevel - 1)
+          console.log(`\n🔈 Suction: ${['', 'quiet', 'standard', 'strong'][this.suctionLevel]}`)
+          await this.venus.setSuctionLevel(this.did, this.model, this.suctionLevel)
+          break
+        case 'status':
+          console.log('\n📊 Fetching status...')
+          const status = await this.venus.getStatus(this.did)
+          console.log(JSON.stringify(status, null, 2))
+          break
+        default:
+          console.log(`\n❓ Unknown action: ${action.action}`)
+      }
+    } catch (e) {
+      console.error(`\n❌ Action error: ${e.response?.data?.message || e.message}`)
     }
   }
 
@@ -110,7 +113,13 @@ class VacuumController {
       }
     }, 100)
 
-    console.log('🎮 Vacuum controller active. Use controller/keyboard to drive.')
+    console.log('🎮 Vacuum controller active!')
+    console.log('')
+    console.log('   Controls:')
+    console.log('   W/A/S/D = Move    Q/E = Turn    Space = Stop')
+    console.log('   1 = Clean   2 = Pause   3 = Dock')
+    console.log('   4 = Suction ↓   5 = Suction ↑   6 = Status')
+    console.log('')
   }
 }
 
@@ -136,7 +145,6 @@ async function main() {
   console.log('📋 Finding vacuum...')
   const devices = await wyze.getDeviceList()
   
-  // Try env var first, then auto-detect
   const vacuumMac = process.env.VACUUM_MAC
   const vacuumName = process.env.VACUUM_NAME
 
@@ -146,23 +154,33 @@ async function main() {
   } else if (vacuumName) {
     vacuum = devices.find(d => d.nickname.toLowerCase() === vacuumName.toLowerCase())
   } else {
-    // Auto-detect: look for vacuum-like devices
-    const vacuumKeywords = ['vacuum', 'robot', 'vac', 'sweep']
+    const vacuumKeywords = ['vacuum', 'robot', 'vac', 'sweep', 'ja_ro']
     vacuum = devices.find(d => {
-      const searchStr = `${d.product_type} ${d.product_model} ${d.nickname}`.toLowerCase()
-      return vacuumKeywords.some(k => searchStr.includes(k))
+      const s = `${d.product_type} ${d.product_model} ${d.nickname}`.toLowerCase()
+      return vacuumKeywords.some(k => s.includes(k))
     })
   }
 
   if (!vacuum) {
-    console.error('❌ Could not find vacuum. Run scan-vacuum.js first to identify it.')
-    console.error('   Then set VACUUM_MAC or VACUUM_NAME env var.')
+    console.error('❌ Could not find vacuum. Run scan-vacuum.js first.')
     process.exit(1)
   }
 
-  console.log(`🤖 Found: "${vacuum.nickname}" (${vacuum.mac})\n`)
+  console.log(`🤖 Found: "${vacuum.nickname}" (${vacuum.mac})`)
 
-  const vc = new VacuumController(wyze, vacuum)
+  // Create Venus service with the access token
+  const venus = new VenusService(wyze.accessToken)
+
+  console.log('📊 Checking vacuum status...')
+  try {
+    const status = await venus.getStatus(vacuum.mac)
+    console.log(`   Mode: ${JSON.stringify(status.data?.mode || status)}`)
+  } catch (e) {
+    console.log(`   ⚠️  Could not get Venus status: ${e.response?.data?.message || e.message}`)
+  }
+
+  console.log('')
+  const vc = new VacuumController(wyze, venus, vacuum)
   vc.start()
 }
 
